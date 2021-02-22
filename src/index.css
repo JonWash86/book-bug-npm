@@ -1,4 +1,5 @@
 body {
+  background-color: #1d242b;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -7,6 +8,62 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.searchBar {
+  display: inline-block;
+  position: absolute;
+  right: 18px;
+  align-items: center;
+}
+
+#bookSearch {
+  width: 250px;
+  padding: 8px;
+  font-size: 18px;
+  border: none;
+  background-color: white;
+  border-radius: 35px;
+}
+
+#bookSearch:focus {
+  outline: 0;
+}
+
+.bookResult {
+  padding-top: 12px;
+  text-align: left;
+  padding-left: 100px;
+  padding-right: 100px;
+  padding-bottom: 15px;
+  width:100%;
+  overflow: auto;
+}
+
+.bookResult:hover {
+  background-color: #B6EFD4;
+}
+
+.bookThumb {
+  float: left;
+  padding-right: 20px;
+}
+
+.resultInfo {
+  float: left;
+}
+
+/* Book Detail css */
+.contentArea {
+  position: absolute;
+  height: calc(100vh - 120px);
+  width: calc(100vw - 150px);
+  padding: 25px 75px;
+  top: 70px;
+  background-color: #A0CCDA;
+  overflow:hidden;
+  overflow-y:scroll;
+}
+
+/*  */
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
