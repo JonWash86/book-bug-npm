@@ -76,6 +76,7 @@ function App(props) {
             results={results}
             displayBookPage={displayBookPage}
           />
+          <Route path='/results' />
           <Route path='/volume/:id'
             render={(props) => (
               <BookDetail activeBook={activeBook} />
