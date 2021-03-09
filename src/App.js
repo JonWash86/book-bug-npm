@@ -7,7 +7,6 @@ import {
   Link,
   useHistory
 } from "react-router-dom";
-
 import HomePage from './components/HomePage';
 import SearchBar from './components/SearchBar';
 import Results from './components/Results';
@@ -54,10 +53,7 @@ function App(props) {
   }
 
   const displayBookPage = book => {
-    console.log(book);
     setActiveBook(book);
-    console.log(activeBook);
-    // history.push('/volume/' + id);
   }
 
   return (

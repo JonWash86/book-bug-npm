@@ -63,6 +63,11 @@ body {
   overflow-y:scroll;
 }
 
+.volume-thumbnail {
+  border-radius: 5px;
+  border: 1px solid white;
+}
+
 /*  */
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
