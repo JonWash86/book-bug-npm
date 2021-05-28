@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 function HomePage(props){
   return(
-    <div class='contentArea'>
+    <div className='contentArea'>
       Home Page!
       <></>
     </div>

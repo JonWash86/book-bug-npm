@@ -7,17 +7,20 @@ import {
   Link,
   useHistory
 } from "react-router-dom";
-import HomePage from './components/HomePage';
-import SearchBar from './components/SearchBar';
-import Results from './components/Results';
+import fire from './fire.js';
+
 import BookDetail from './components/BookDetail';
+import HomePage from './components/HomePage';
+import Login from './components/Login';
+import Results from './components/Results';
+import SearchBar from './components/SearchBar';
 
 function App(props) {
 
   const [searchValue, setSearch] = useState('search for something');
   const [results, updateResults] = useState(null);
   const [activeBook, setActiveBook] = useState(null);
-  // const [] = useState();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   let history = useHistory();
 
@@ -26,6 +29,10 @@ function App(props) {
       history.push('/volume/' + activeBook.id);
     }
   }, [activeBook]);
+
+  fire.auth().onAuthStateChanged((user) => {
+    return user ? setIsLoggedIn(true) : setIsLoggedIn(false);
+  });
 
   const searchForBook = searchValue => {
     setSearch(searchValue);
@@ -56,11 +63,22 @@ function App(props) {
     setActiveBook(book);
   }
 
+  const signOut = () => {
+    fire.auth().signOut();
+  }
+
+  if(!isLoggedIn) {
+    return <Login  />
+  }
+
   return (
     <div className='App'>
       <header className='App-header'>
         <p id='title'>BookBug</p>
         <SearchBar searchForBook={searchForBook}/>
+        <span onClick={signOut}>
+          <a href='#'>Sign out</a>
+        </span>
       </header>
         <div className='body'>
           <Route path='/'
@@ -75,7 +93,9 @@ function App(props) {
           <Route path='/results' />
           <Route path='/volume/:id'
             render={(props) => (
-              <BookDetail activeBook={activeBook} />
+              <BookDetail activeBook={activeBook}
+                displayBookPage={displayBookPage}
+               {...props} />
             )}
           />
         </div>

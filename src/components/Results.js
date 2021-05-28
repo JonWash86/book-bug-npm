@@ -16,20 +16,20 @@ function Results(props){
   }
 
   return(
-    <div class='contentArea'>
+    <div className='contentArea'>
       <ul>
         {props.results.map(book => (
           <li
             id={book.id}
-            class='bookResult'
+            className='bookResult'
             onClick={handleClick}
           >
             <img
-              class='bookThumb'
+              className='bookThumb'
               height='125'
               src={book.imageLinks ? book.imageLinks.thumbnail : 'null'}
             />
-            <div class='resultInfo'>
+            <div className='resultInfo'>
               {book.title}
               <br/>
               by {book.authors}
