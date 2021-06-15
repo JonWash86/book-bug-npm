@@ -14,6 +14,7 @@ import HomePage from './components/HomePage';
 import Login from './components/Login';
 import Results from './components/Results';
 import SearchBar from './components/SearchBar';
+import SignUp from './components/SignUp';
 
 function App(props) {
 
@@ -90,7 +91,13 @@ function App(props) {
             results={results}
             displayBookPage={displayBookPage}
           />
-          <Route path='/results' />
+          // TODO: The below route could allow a user to pass search parameters and see the results
+          // <Route path='/results' />
+          <Route path='/signup'
+            render={(props) => (
+              <SignUp />
+            )}
+          />
           <Route path='/volume/:id'
             render={(props) => (
               <BookDetail activeBook={activeBook}
