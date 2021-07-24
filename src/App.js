@@ -14,7 +14,6 @@ import HomePage from './components/HomePage';
 import Login from './components/Login';
 import Results from './components/Results';
 import SearchBar from './components/SearchBar';
-import SignUp from './components/SignUp';
 
 function App(props) {
 
@@ -31,14 +30,23 @@ function App(props) {
     }
   }, [activeBook]);
 
+  // useEffect(() => {
+  //   if (searchValue.searchValue){
+  //     history.push('/results/' + searchValue.searchValue);
+  //     searchForBook(searchValue.searchValue);
+  //   }
+  // }, [searchValue])
+
   fire.auth().onAuthStateChanged((user) => {
     return user ? setIsLoggedIn(true) : setIsLoggedIn(false);
   });
 
   const searchForBook = searchValue => {
+    console.log('value: ');
+    console.log(searchValue);
     setSearch(searchValue);
     let searchString = 'https://www.googleapis.com/books/v1/volumes?q='
-    + searchValue.searchValue + '&key=' +
+    + searchValue + '&key=' +
     process.env.REACT_APP_GOOGLE_BOOKS_KEY;
 
     fetch(searchString)
@@ -55,7 +63,8 @@ function App(props) {
               return newObj;
             });
             updateResults(resultItems);
-            console.log({results});
+            history.push('/results/' + searchValue);
+            setActiveBook(null);
           }
         )
   }
@@ -87,21 +96,21 @@ function App(props) {
               <HomePage />
             )}
           />
-          <Results
-            results={results}
-            displayBookPage={displayBookPage}
-          />
           // TODO: The below route could allow a user to pass search parameters and see the results
-          // <Route path='/results' />
-          <Route path='/signup'
+          <Route path='/results/:query'
             render={(props) => (
-              <SignUp />
+              <Results
+              results={results}
+              displayBookPage={displayBookPage}
+              searchForBook={searchForBook}
+              {...props} />
             )}
           />
           <Route path='/volume/:id'
             render={(props) => (
               <BookDetail activeBook={activeBook}
                 displayBookPage={displayBookPage}
+                searchValue={searchValue}
                {...props} />
             )}
           />

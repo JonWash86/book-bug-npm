@@ -29,6 +29,7 @@ body {
 }
 
 .bookResult {
+  pointer-events: auto;
   padding-top: 12px;
   text-align: left;
   padding-left: 100px;
@@ -67,6 +68,29 @@ body {
 .volume-thumbnail {
   border-radius: 5px;
   border: 1px solid white;
+}
+
+#back-arrow:hover {
+  cursor: pointer;
+}
+
+/* Login Page css */
+#pwFeedback {
+  display: none;
+}
+
+.valid {
+  color:green;
+}
+
+.invalid {
+  color: red;
+}
+
+.valid:before {
+  position: relative;
+  left: -35px;
+  content: "&#10004;";
 }
 
 /*  */

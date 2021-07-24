@@ -8,7 +8,7 @@ function SearchBar(props){
   };
 
   const handleClick = event => {
-    props.searchForBook({searchValue})
+    props.searchForBook(searchValue);
   }
 
   return(

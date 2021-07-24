@@ -19,21 +19,14 @@ function BookDetail(props){
 
   let history = useHistory();
 
-  console.log('props!');
-  console.log(props);
-  console.log('id!');
-  console.log(props.match.params.id);
-
   useEffect(() => {
     // Fetch the volume info if user is directly navigating to the volume page by id.
-    console.log('the use effect fired!');
     if(props.match.params.id && !props.activeBook){
       fetchVolumeByUrl();
     }
   });
 
   const fetchVolumeByUrl = () => {
-    console.log('directly checking out a voume info!');
     // Search for a specific volume by id and return its volume info
     const searchString = 'https://www.googleapis.com/books/v1/volumes/' + props.match.params.id + '?key=' +
     process.env.REACT_APP_GOOGLE_BOOKS_KEY;
@@ -43,14 +36,9 @@ function BookDetail(props){
     .then(
       (result) =>
       {
-        console.log(result.volumeInfo);
-
         props.displayBookPage(result.volumeInfo);
-        console.log(props);
         return result.volumeInfo;
       });
-      console.log('props, then volume info!');
-      console.log(props);
     };
 
   if (!props.activeBook){
@@ -61,12 +49,15 @@ function BookDetail(props){
   }
 
   const returnToSearch = event => {
-    history.push('/results');
+    history.push('/results/'  + props.searchValue.searchValue);
   }
 
   return(
     <div className='contentArea'>
-      <a onClick={returnToSearch}>
+      <a
+        id='back-arrow'
+        onClick={returnToSearch}
+      >
         <ArrowBackIosIcon />
       </a>
       <p>The Active Book Page!</p>
