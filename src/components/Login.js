@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import fire from '../fire.js'
 
 function Login(props){
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [newAccount, setAccountStatus] = useState(false);
+  const [pwFeedback, setPwFeedback] = useState(null);
 
   // State for new password validation
   const [lowercaseValid, setLowercaseValid] = useState(false);
@@ -18,18 +19,6 @@ function Login(props){
 
   var passwordValid = true;
 
-  // var passwordInput = document.getElementById('enterPassword');
-  // var passwordConfirm = document.getElementById('confirmPassword');
-  // var lowercaseValid = document.getElementById('lowercaseValid');
-  // var uppercaseValid = document.getElementById('uppercaseValid');
-  // var numberValid = document.getElementById('numberValid');
-  // var lengthValid = document.getElementById('lengthValid');
-
-  // passwordInput.onfocus = function()
-  // {
-  //   document.getElementById('pwFeedback').style.display = 'block';
-  // }
-
   const openRegistration = () => {
     setAccountStatus(true);
   }
@@ -39,23 +28,28 @@ function Login(props){
   }
 
   const passwordChanged = () => {
-    console.log('hi!');
     if (password)
     {
       validatePassword(password);
     }
   }
 
+  const showFeedback = () => {
+    document.getElementById('pwFeedback').style.display = 'block';
+  }
+
+  const hideFeedback = () => {
+    document.getElementById('pwFeedback').style.display = 'none';
+  }
+
   const validatePassword = (password) => {
     // Validate lowercase letters
     var lowerCaseLetters = /[a-z]/g;
     password.match(lowerCaseLetters) ? setLowercaseValid(true) : setLowercaseValid(false);
-    console.log(lowercaseValid);
 
     // Validate uppercase lowercase letters
     var upperCaseLetters = /[A-Z]/g;
     password.match(upperCaseLetters) ? setUppercaseValid(true) : setUppercaseValid(false);
-    console.log(uppercaseValid);
 
     // Validate number
     var numbers = /[0-9]/g;
@@ -63,27 +57,60 @@ function Login(props){
 
     // Validate password length
     password.length >= 8 ? setLengthValid(true) : setLengthValid(false);
+
+    // Determine whether all parameters are valid
+    if (lowercaseValid && uppercaseValid && numberValid && lengthValid && (password === confirmPassword)){
+      setAllValid(true);
+      hideFeedback();
+    } else
+    {
+      document.getElementById('newPwFeedback').style.display = 'block';
+      setAllValid(false);
+    }
+  }
+
+  // Provide specific feedback for invalid passwords
+  const generatePwFeedback = () => {
+    if (newAccount && (password != confirmPassword)){
+      setAllValid(false);
+      setPwFeedback('Passwords are not matching.');
+      showFeedback();
+    }
+    else if (password == '' || email == '')
+    {
+      setPwFeedback('Please enter an email address and password.');
+      showFeedback();
+    }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (newAccount)
+    generatePwFeedback();
+
+    if (newAccount && allValid)
     {
+      document.getElementById('newPwFeedback').style.display = 'none';
       fire.auth().createUserWithEmailAndPassword(email, password).catch((error) => {
+        if (error.message = 'EMAIL_EXISTS')
+        {
+          setPwFeedback('An account using this email already exists.')
+          showFeedback();
+        }
         console.error('Problem creating user');
       });
-    } else {
+    } else if (!newAccount && allValid){
       console.log(`submitted email: ${email} password: ${password}`);
       fire.auth().signInWithEmailAndPassword(email, password)
       .catch((error) => {
         console.error('Incorrect username or password');
+        setPwFeedback('Incorrect username or password');
       });
     }
   }
 
 
 return(
-    <div>
+    <div id='loginModal'>
       <h1>Please log in</h1>
       <form onSubmit={handleSubmit}>
         <label>
@@ -118,7 +145,7 @@ return(
             />
           </label>
         }
-        <div>
+        <div id='loginSubmit'>
             <button type='submit'>Submit</button>
         {!newAccount &&
           <div>
@@ -133,10 +160,12 @@ return(
         </div>
       </form>
         <div id='pwFeedback'>
-          <p>
-            password must include: <span id='lowercaseValid'>a lowecase letter,</span><span id='uppercaseValid'>An uppercase letter</span><span id='numberValid'>A number</span>
-            and <span id='lengthValid'>Minimum 8 characters</span>
+          <p className='invalid'>
+            {pwFeedback}
           </p>
+          { newAccount &&
+            <p id='newPwFeedback'>Password needs <a className={uppercaseValid == true ? 'valid' :'invalid'}>one uppercase letter</a>, <a className={lowercaseValid == true ? 'valid' :'invalid'}>one lowercase letter</a>, <a className={numberValid == true ? 'valid' :'invalid'}>one number</a>, and <a className={lengthValid == true ? 'valid' :'invalid'}>must be at least eight characters long</a>.</p>
+          }
         </div>
     </div>
   )

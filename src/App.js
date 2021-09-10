@@ -30,20 +30,11 @@ function App(props) {
     }
   }, [activeBook]);
 
-  // useEffect(() => {
-  //   if (searchValue.searchValue){
-  //     history.push('/results/' + searchValue.searchValue);
-  //     searchForBook(searchValue.searchValue);
-  //   }
-  // }, [searchValue])
-
   fire.auth().onAuthStateChanged((user) => {
     return user ? setIsLoggedIn(true) : setIsLoggedIn(false);
   });
 
   const searchForBook = searchValue => {
-    console.log('value: ');
-    console.log(searchValue);
     setSearch(searchValue);
     let searchString = 'https://www.googleapis.com/books/v1/volumes?q='
     + searchValue + '&key=' +
@@ -96,7 +87,6 @@ function App(props) {
               <HomePage />
             )}
           />
-          // TODO: The below route could allow a user to pass search parameters and see the results
           <Route path='/results/:query'
             render={(props) => (
               <Results
